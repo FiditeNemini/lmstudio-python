@@ -200,7 +200,7 @@ TStruct = TypeVar("TStruct", bound=AnyLMStudioStruct)
 DEFAULT_TTL = 60 * 60  # By default, leaves idle models loaded for an hour
 
 # lmstudio-js and lmstudio-python use the same API token environment variable
-_ENV_API_TOKEN = "LMSTUDIO_API_TOKEN"
+_ENV_API_TOKEN = "LM_API_TOKEN"
 _LMS_API_TOKEN_REGEX = re.compile(
     r"^sk-lm-(?P<clientIdentifier>[A-Za-z0-9]{8}):(?P<clientPasskey>[A-Za-z0-9]{20})$"
 )

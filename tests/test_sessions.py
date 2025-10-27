@@ -36,7 +36,7 @@ _VALID_API_TOKEN = "sk-lm-abcDEF78:abcDEF7890abcDEF7890"
 @pytest.mark.parametrize("client_cls", [AsyncClient, Client])
 def test_auth_message_default(client_cls: ClientBase) -> None:
     with mock.patch.dict(os.environ) as env:
-        env.pop("LMSTUDIO_API_TOKEN", None)
+        env.pop("LM_API_TOKEN", None)
         auth_message = client_cls._create_auth_from_token(None)
         assert auth_message["authVersion"] == 1
         assert auth_message["clientIdentifier"].startswith("guest:")
@@ -49,7 +49,7 @@ def test_auth_message_default(client_cls: ClientBase) -> None:
 def test_auth_message_empty_token(client_cls: ClientBase) -> None:
     with mock.patch.dict(os.environ) as env:
         # Set a valid token in the env to ensure it is ignored
-        env["LMSTUDIO_API_TOKEN"] = _VALID_API_TOKEN
+        env["LM_API_TOKEN"] = _VALID_API_TOKEN
         auth_message = client_cls._create_auth_from_token("")
         assert auth_message["authVersion"] == 1
         assert auth_message["clientIdentifier"].startswith("guest:")
@@ -61,7 +61,7 @@ def test_auth_message_empty_token(client_cls: ClientBase) -> None:
 @pytest.mark.parametrize("client_cls", [AsyncClient, Client])
 def test_auth_message_empty_token_from_env(client_cls: ClientBase) -> None:
     with mock.patch.dict(os.environ) as env:
-        env["LMSTUDIO_API_TOKEN"] = ""
+        env["LM_API_TOKEN"] = ""
         auth_message = client_cls._create_auth_from_token(None)
         assert auth_message["authVersion"] == 1
         assert auth_message["clientIdentifier"].startswith("guest:")
@@ -81,7 +81,7 @@ def test_auth_message_valid_token(client_cls: ClientBase) -> None:
 @pytest.mark.parametrize("client_cls", [AsyncClient, Client])
 def test_auth_message_valid_token_from_env(client_cls: ClientBase) -> None:
     with mock.patch.dict(os.environ) as env:
-        env["LMSTUDIO_API_TOKEN"] = _VALID_API_TOKEN
+        env["LM_API_TOKEN"] = _VALID_API_TOKEN
         auth_message = client_cls._create_auth_from_token(None)
         assert auth_message["authVersion"] == 1
         assert auth_message["clientIdentifier"] == "abcDEF78"
@@ -101,7 +101,7 @@ _INVALID_TOKENS = [
 @pytest.mark.parametrize("api_token", _INVALID_TOKENS)
 def test_auth_message_invalid_token(client_cls: ClientBase, api_token: str) -> None:
     with mock.patch.dict(os.environ) as env:
-        env["LMSTUDIO_API_TOKEN"] = _VALID_API_TOKEN
+        env["LM_API_TOKEN"] = _VALID_API_TOKEN
         with pytest.raises(LMStudioValueError):
             client_cls._create_auth_from_token(api_token)
 
@@ -112,7 +112,7 @@ def test_auth_message_invalid_token_from_env(
     client_cls: ClientBase, api_token: str
 ) -> None:
     with mock.patch.dict(os.environ) as env:
-        env["LMSTUDIO_API_TOKEN"] = api_token
+        env["LM_API_TOKEN"] = api_token
         with pytest.raises(LMStudioValueError):
             client_cls._create_auth_from_token(None)
 
